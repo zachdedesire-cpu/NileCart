@@ -2,92 +2,148 @@ let cartCount = 0;
 
 const products = [
     {
-        name: "Smartphone",
+        id: 1,
+        name: "Samsung Galaxy Smartphone",
         category: "Electronics",
-        price: "$120",
-        icon: "📱"
+        price: 120,
+        image: "images/smartphone.jpg",
+        description: "A modern smartphone suitable for everyday communication, entertainment and business."
     },
+
     {
-        name: "Men's Shirt",
+        id: 2,
+        name: "Men's Casual Shirt",
         category: "Fashion",
-        price: "$18",
-        icon: "👕"
+        price: 18,
+        image: "images/shirt.jpg",
+        description: "Comfortable casual shirt suitable for everyday wear."
     },
+
     {
-        name: "Modern Chair",
+        id: 3,
+        name: "Modern Home Chair",
         category: "Home",
-        price: "$45",
-        icon: "🪑"
+        price: 45,
+        image: "images/chair.jpg",
+        description: "A stylish chair designed for homes, offices and businesses."
     },
+
     {
-        name: "Beauty Set",
+        id: 4,
+        name: "Beauty Care Set",
         category: "Beauty",
-        price: "$25",
-        icon: "💄"
+        price: 25,
+        image: "images/beauty.jpg",
+        description: "A personal beauty-care set for everyday use."
     },
+
     {
-        name: "Fresh Groceries",
+        id: 5,
+        name: "Fresh Grocery Package",
         category: "Food",
-        price: "$15",
-        icon: "🍎"
+        price: 15,
+        image: "images/grocery.jpg",
+        description: "A convenient grocery package for everyday household needs."
     },
+
     {
+        id: 6,
         name: "Motorcycle",
         category: "Vehicles",
-        price: "$850",
-        icon: "🏍️"
+        price: 850,
+        image: "images/motorcycle.jpg",
+        description: "A practical motorcycle suitable for transportation and business use."
     }
 ];
 
-function displayProducts(list) {
+
+function displayProducts(list = products) {
 
     const container =
         document.getElementById("product-container");
 
     if (!container) {
-        console.error("Product container not found.");
         return;
     }
 
     container.innerHTML = "";
 
-    list.forEach((product, index) => {
+    if (list.length === 0) {
 
-        const card = document.createElement("div");
+        container.innerHTML = `
+            <p class="no-products">
+                No products found.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    list.forEach(product => {
+
+        const card =
+            document.createElement("div");
 
         card.className = "product-card";
 
         card.innerHTML = `
+
             <div class="product-image">
-                ${product.icon}
+
+                <img
+                    src="${product.image}"
+                    alt="${product.name}"
+                    onerror="this.style.display='none'; this.parentElement.innerHTML='🛍️';"
+                >
+
             </div>
 
             <div class="product-info">
-
-                <h3>${product.name}</h3>
 
                 <p class="product-category">
                     ${product.category}
                 </p>
 
+                <h3>
+                    ${product.name}
+                </h3>
+
                 <p class="price">
-                    ${product.price}
+                    $${product.price}
+                </p>
+
+                <p class="product-description">
+                    ${product.description}
                 </p>
 
                 <button
                     class="add-cart"
-                    onclick="addToCart(${index})">
+                    onclick="addToCart(${product.id})">
+
                     Add to Cart
+
                 </button>
 
             </div>
+
         `;
 
         container.appendChild(card);
     });
 }
 
-function addToCart(index) {
+
+function addToCart(productId) {
+
+    const product =
+        products.find(
+            item => item.id === productId
+        );
+
+    if (!product) {
+        return;
+    }
 
     cartCount++;
 
@@ -99,16 +155,18 @@ function addToCart(index) {
     }
 
     alert(
-        products[index].name +
+        product.name +
         " has been added to your cart!"
     );
 }
+
 
 function filterCategory(category) {
 
     const filteredProducts =
         products.filter(
-            product => product.category === category
+            product =>
+                product.category === category
         );
 
     displayProducts(filteredProducts);
@@ -119,6 +177,7 @@ function filterCategory(category) {
         });
 }
 
+
 function searchProducts() {
 
     const input =
@@ -128,15 +187,26 @@ function searchProducts() {
         input.value.toLowerCase().trim();
 
     if (searchTerm === "") {
+
         displayProducts(products);
+
         return;
     }
 
+
     const results =
         products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm) ||
-            product.category.toLowerCase().includes(searchTerm)
+
+            product.name
+                .toLowerCase()
+                .includes(searchTerm) ||
+
+            product.category
+                .toLowerCase()
+                .includes(searchTerm)
+
         );
+
 
     displayProducts(results);
 
@@ -146,6 +216,7 @@ function searchProducts() {
         });
 }
 
+
 function scrollToProducts() {
 
     document.getElementById("products")
@@ -153,6 +224,7 @@ function scrollToProducts() {
             behavior: "smooth"
         });
 }
+
 
 function scrollToCategories() {
 
@@ -162,8 +234,12 @@ function scrollToCategories() {
         });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
 
-    displayProducts(products);
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-});
+        displayProducts(products);
+
+    }
+);
