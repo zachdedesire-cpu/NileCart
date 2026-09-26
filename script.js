@@ -5,7 +5,7 @@ const products = [
         id: 1,
         name: "Samsung Galaxy Smartphone",
         category: "Electronics",
-        price: 120,
+        price: 1,500,
         image: "images/smartphone.jpg",
         description: "A modern smartphone suitable for everyday communication, entertainment and business."
     },
