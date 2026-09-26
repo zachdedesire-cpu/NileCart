@@ -39,13 +39,19 @@ const products = [
     }
 ];
 
-function displayProducts(productList = products) {
+function displayProducts(list) {
 
-    const container = document.getElementById("product-container");
+    const container =
+        document.getElementById("product-container");
+
+    if (!container) {
+        console.error("Product container not found.");
+        return;
+    }
 
     container.innerHTML = "";
 
-    productList.forEach((product, index) => {
+    list.forEach((product, index) => {
 
         const card = document.createElement("div");
 
@@ -85,7 +91,12 @@ function addToCart(index) {
 
     cartCount++;
 
-    document.getElementById("cart-count").textContent = cartCount;
+    const cartCounter =
+        document.getElementById("cart-count");
+
+    if (cartCounter) {
+        cartCounter.textContent = cartCount;
+    }
 
     alert(
         products[index].name +
@@ -95,11 +106,12 @@ function addToCart(index) {
 
 function filterCategory(category) {
 
-    const filtered = products.filter(
-        product => product.category === category
-    );
+    const filteredProducts =
+        products.filter(
+            product => product.category === category
+        );
 
-    displayProducts(filtered);
+    displayProducts(filteredProducts);
 
     document.getElementById("products")
         .scrollIntoView({
@@ -109,15 +121,22 @@ function filterCategory(category) {
 
 function searchProducts() {
 
-    const searchInput =
-        document.getElementById("search-input")
-        .value
-        .toLowerCase();
+    const input =
+        document.getElementById("search-input");
 
-    const results = products.filter(product =>
-        product.name.toLowerCase().includes(searchInput) ||
-        product.category.toLowerCase().includes(searchInput)
-    );
+    const searchTerm =
+        input.value.toLowerCase().trim();
+
+    if (searchTerm === "") {
+        displayProducts(products);
+        return;
+    }
+
+    const results =
+        products.filter(product =>
+            product.name.toLowerCase().includes(searchTerm) ||
+            product.category.toLowerCase().includes(searchTerm)
+        );
 
     displayProducts(results);
 
@@ -143,4 +162,8 @@ function scrollToCategories() {
         });
 }
 
-displayProducts();
+document.addEventListener("DOMContentLoaded", function () {
+
+    displayProducts(products);
+
+});
