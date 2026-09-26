@@ -1,0 +1,1 @@
+NileCart product images will be stored here.
